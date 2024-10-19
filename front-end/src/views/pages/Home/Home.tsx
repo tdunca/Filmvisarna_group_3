@@ -1,6 +1,7 @@
 import React from 'react';
 import './Home.css';
 import MovieCollectionSection  from '../../..//components/MovieCollectionSection/MovieCollectionSection';
+import ScheduleSection from '../../../components/ScheduleSection/ScheduleSection';
 
 const Home: React.FC = () => {
   return (
@@ -13,6 +14,10 @@ const Home: React.FC = () => {
 				<section>
 					<h2>Våra filmer</h2>
 					<MovieCollectionSection />
+			</section>
+			<section>
+				<h2>Program</h2>
+				<ScheduleSection date={new Date()} />
 				</section>
     </div>
   );
