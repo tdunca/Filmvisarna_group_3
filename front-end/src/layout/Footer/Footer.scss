@@ -1,0 +1,48 @@
+@import '../../sass/variables.scss';
+.footer {
+  background-color: $color-primary-dark;
+  padding: 10px;
+  border: 2px solid $color-secondary;
+  border-radius: 10px;
+  z-index: 1;
+
+  h5 {
+    color: $color-secondary;
+  }
+
+  .list-unstyled {
+    padding-left: 0;
+    li {
+      margin-bottom: 10px;
+
+      a {
+        color: $color-secondary;
+        text-decoration: none;
+
+        transition: color 0.3s ease;
+
+        &:hover {
+          filter: brightness(1.3);
+        }
+      }
+    }
+  }
+
+  .social-media-links {
+    a {
+      margin: 0 10px;
+      text-decoration: none;
+
+      img {
+        width: 40px;
+        transition: filter 0.3s ease;
+      }
+
+      &:hover {
+        img {
+          filter: brightness(1.3);
+        }
+      }
+    }
+  }
+}
