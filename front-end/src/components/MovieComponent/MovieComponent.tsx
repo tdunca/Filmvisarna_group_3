@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './MovieComponent.css';
+import './MovieComponent.scss';
 
 interface MovieButtonProps {
 	_id: string;
