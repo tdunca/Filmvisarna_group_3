@@ -1,5 +1,5 @@
 import React from 'react';
-import './Header.css';
+import './Header.scss';
 import Logo from '../../components/Logo/Logo';
 import Button from '@mui/material/Button';
 import SearchIcon from '../../assets/icons/search_35dp_FCAF00_FILL0_wght400_GRAD0_opsz40.png';
@@ -14,7 +14,7 @@ const Header: React.FC = () => {
           sx={{
             height: '80px',
             width: '80px',
-            border: 'none', 
+            border: 'none',
             borderRight: '2px solid #fcaf00',
             color: '#fcaf00',
           }}
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
           sx={{
             height: '80px',
             width: '80px',
-            border: 'none', 
+            border: 'none',
             borderRight: '2px solid #fcaf00',
             color: '#fcaf00',
           }}
@@ -34,7 +34,7 @@ const Header: React.FC = () => {
           sx={{
             height: '80px',
             width: '80px',
-            border: 'none', 
+            border: 'none',
             borderRight: '2px solid #fcaf00',
             color: '#fcaf00',
           }}
@@ -49,7 +49,7 @@ const Header: React.FC = () => {
           sx={{
             height: '80px',
             width: '80px',
-            border: 'none', 
+            border: 'none',
             borderLeft: '2px solid #fcaf00',
             color: '#fcaf00',
           }}
@@ -59,7 +59,7 @@ const Header: React.FC = () => {
           sx={{
             height: '80px',
             width: '80px',
-            border: 'none', 
+            border: 'none',
             borderLeft: '2px solid #fcaf00',
             color: '#fcaf00',
             display: 'flex',

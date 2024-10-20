@@ -1,0 +1,9 @@
+main {
+	margin-top: 80px;
+	min-height: calc(100vh - (80px + 300px));
+	height: fit-content;
+	justify-content: center;
+	width: 100%;
+	display: block;
+	flex-grow: 1;
+}

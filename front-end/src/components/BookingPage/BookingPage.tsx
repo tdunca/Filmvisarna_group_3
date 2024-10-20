@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './BookingPage.css';
+import './BookingPage.scss';
 import dateIcon from '../../assets/icons/calendar_today_35dp_FCAF00_FILL0_wght400_GRAD0_opsz40.png';
 import timeIcon from '../../assets/icons/schedule_35dp_FCAF00_FILL0_wght400_GRAD0_opsz40.png';
 import hallIcon from '../../assets/icons/icon-cinema-fatter.png';
@@ -326,7 +326,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
                   />
                 </div>
                 <div className="checkbox-label">
-                  Jag är medveten om filmer kan ha åldersgränser. Barn som har fyllt 11 år får medfölja i vuxens sällskap. Ålder ska kunna styrkas med giltig legitimation. 
+                  Jag är medveten om filmer kan ha åldersgränser. Barn som har fyllt 11 år får medfölja i vuxens sällskap. Ålder ska kunna styrkas med giltig legitimation.
                   </div>
               </label>
             </div>
@@ -337,7 +337,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
               </button>
           </div>
 
-          
+
 
         </div>
       </div>
@@ -363,7 +363,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
         </div>
       )}
       {/* Section 6: Total Amount - Aside */}
-      <div className="total-amount-aside"> 
+      <div className="total-amount-aside">
           <div className="total-amount">
             <h3>Ordinarie: {ticketCounts.adult} st {ticketCounts.adult * 140} kr</h3>
             <h3>Barn: {ticketCounts.child} st {ticketCounts.child * 80} kr</h3>

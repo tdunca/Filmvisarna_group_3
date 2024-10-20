@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MovieComponent from '../MovieComponent/MovieComponent';
 import Button from '../FrontPageButton/FrontPageButton';
-import './MovieCollectionSection.css';
+import './MovieCollectionSection.scss';
 
 interface Movie {
   _id: string;
@@ -67,7 +67,7 @@ const MovieCollectionSection: React.FC = () => {
         </div>
         <div className="movie-grid">
           {filteredMovies.map((movie) => (
-            <MovieComponent 
+            <MovieComponent
               key={movie._id}
               _id={movie._id}
               title={movie.title}
