@@ -184,6 +184,24 @@ export const getShowtimeById = async (req, res) => {
   }
 };
 
+export const getShowtimeSeats = async (req, res) => {
+  try {
+    const showtimeId = req.params.id;
+    const showtime = await Showtime.findById(showtimeId).populate('seats.seat');
+    
+    if (!showtime) {
+      return res.status(404).json({ message: 'Showtime not found' });
+    }
+
+    // Ensure we're sending JSON
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).json({ seats: showtime.seats });
+  } catch (error) {
+    console.error('Error fetching seats:', error);
+    return res.status(500).json({ message: 'Error fetching seats', error: error.message });
+  }
+};
+
 export const updateShowtime = async (req, res) => {
   try {
     const { id } = req.params;

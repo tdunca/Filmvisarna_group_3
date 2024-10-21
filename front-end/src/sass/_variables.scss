@@ -1,0 +1,29 @@
+// Färgvariabler
+$color-primary-dark: #000F26;
+$color-primary-light: #045685;
+$color-secondary: #FCAF00;
+$color-success: #2cdf8c;
+$color-highlight: #028ed9;
+$color-error: #FC3824;
+$color-white: #ffffff;
+$color-border-light: #ddd;
+$color-text-white: white;
+$color-text-dark: #000F26;
+$color-alert-success-bg: #d4edda;
+$color-alert-success-text: #155724;
+$color-alert-error-bg: #f8d7da;
+$color-alert-error-text: #721c24;
+$color-unavailable-seat: #795400;
+$color-email-input-border: #ddd;
+$color-age-box-border: #FC3824;
+$color-modal-bg: linear-gradient(to right, $color-primary-dark, $color-primary-light, $color-primary-dark);
+
+// Bakgrundsgradienter
+$bg-gradient-info: linear-gradient(to bottom, $color-primary-light, $color-primary-dark 20%);
+$bg-gradient-ticket-counts: linear-gradient(to right, $color-primary-dark, $color-primary-light, $color-primary-dark);
+$bg-gradient-contact-info: linear-gradient(to right, $color-primary-dark, $color-primary-light, $color-primary-dark);
+$bg-gradient-modal: $color-modal-bg;
+$bg-gradient-total-amount: linear-gradient(to bottom, $color-secondary, $color-white);
+
+// Border Image
+$border-image-poster: linear-gradient(to bottom, $color-primary-dark, $color-primary-light) 1;

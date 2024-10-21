@@ -58,6 +58,14 @@ const movieSchema = new mongoose.Schema({
         required: true,
         default: "dQw4w9WgXcQ",
     },
+    ageRestriction: {
+        type: Number,
+        required: true,
+    },
+    imdbRating: {
+        type: Number,
+        required: true,
+    }
 }, { timestamps: true });
 
 const Movie = mongoose.model('Movie', movieSchema);

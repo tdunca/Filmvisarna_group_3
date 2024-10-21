@@ -9,8 +9,9 @@ import { bookTicket, getTickets, getUserInfo, removeTicket, userInfoByTicket } f
 import { createBooking, getAvailableSeats } from '../controllers/bookingController.js';
 const userRouter = express.Router();
 
-// book a ticket
-userRouter.post('/book-ticket', authUser, bookTicket);
+//Authenticated routes----------------
+// book a ticket -- NOT IN USE
+// userRouter.post('/book-ticket', authUser, bookTicket); // NOT IN USE
 
 // remove a ticket by booking number
 userRouter.delete('/remove-ticket/:bookingNumber', authUser, removeTicket);
@@ -25,6 +26,14 @@ userRouter.get('/ticket/:bookingNumber', authUser, userInfoByTicket);
 
 userRouter.get("/info", authUser, getUserInfo);
 
-userRouter.post('/bookings', createBooking);
-userRouter.get('/showtime/:showtimeId/seats', getAvailableSeats);
+// userRouter.post('/bookings', createBooking);
+// userRouter.get('/booking/:showtimeId', authUser, getAvailableSeats);
+// userRouter.post('/booking/:showtimeId', authUser, createBooking);
+
+// Non-authenticated routes-------------
+userRouter.get('/booking/:showtimeId/seats', getAvailableSeats);
+// Create a booking
+userRouter.post('/bookings', createBooking); //No token needed
+
+// userRouter.get('/showtime/:showtimeId/seats', getAvailableSeats);
 export default userRouter;

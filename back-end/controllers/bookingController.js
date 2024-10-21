@@ -180,7 +180,7 @@ const generateBookingEmail = async (booking, showtime, user) => {
     <p>Att betala: ${booking.totalAmount} kr</p>
     <hr>
     <p>Var vänlig och kom 15 minuter innan visningen börjar.</p>
-    <p>Du kan logga in på MonsterBio för att se din bokningsinormation.</p>
+    <p>Du kan logga in på MonsterBio för att se din bokningsinformation.</p>
   `;
 };
 

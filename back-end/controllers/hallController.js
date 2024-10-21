@@ -19,9 +19,14 @@ export const createHall = async (req, res) => {
 
     // Create seats for the hall
     const seats = [];
+    let seatCounter = 1;
     for (let i = 0; i < seatsPerRow.length; i++) {
       for (let j = 0; j < seatsPerRow[i]; j++) {
-        const seat = new Seat({ seatNumber: j + 1, rowNumber: i + 1, hall: hall._id });
+        const seat = new Seat({
+          seatNumber: seatCounter++, 
+          rowNumber: i + 1,
+          hall: hall._id
+        });
         seats.push(seat);
       }
     }
@@ -106,4 +111,42 @@ export const getSeatsOfHallAtShowtime = async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: "Server error" });
     }
+}
+  
+// Patcher för att uppdatera seatNumber och göra det kontinuerligt
+export const patchSeats = async (req, res) => {
+  try {
+    const hallId = '67078199c8a54ccb5e7e6e21'; // Hall-ID som ska patchas
+
+    // Hämta alla säten för hallen och sortera efter rowNumber och sedan seatNumber
+    const seats = await Seat.find({ hall: hallId }).sort({ rowNumber: 1, seatNumber: 1 });
+
+    // Steg 1: Konvertera seatNumber till Number
+    await Seat.updateMany(
+      { hall: hallId },
+      [
+        {
+          $set: {
+            seatNumber: { $toInt: "$seatNumber" }  // Konvertera seatNumber till int
+          }
+        }
+      ]
+    );
+
+    // Steg 2: Uppdatera seatNumber till kontinuerligt nummer
+    let seatCounter = 1; // Starta från 1 för kontinuerlig numrering
+    const bulkOperations = seats.map(seat => ({
+      updateOne: {
+        filter: { _id: seat._id },
+        update: { $set: { seatNumber: seatCounter++ } }
+      }
+    }));
+
+    await Seat.bulkWrite(bulkOperations);
+
+    res.status(200).json({ message: "Seats successfully updated with continuous seatNumber." });
+  } catch (error) {
+    console.error('Error updating seats:', error);
+    res.status(500).json({ error: "Server error" });
   }
+};

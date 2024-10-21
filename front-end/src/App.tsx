@@ -4,13 +4,13 @@ import './App.css'
 import Footer from './layout/Footer/Footer'
 import Header from './layout/Header/Header'
 import Main from './layout/Main/Main'
-import Background from './components/Background/Background'
+// import Background from './components/Background/Background'
 
 const App: React.FC = () => {
 
   return (
     <div className='app'>
-      <Background />
+      {/* <Background /> */}
       <Router>
         <Header />
         <Main />

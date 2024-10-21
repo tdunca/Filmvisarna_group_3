@@ -1,0 +1,31 @@
+.background {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	z-index: -1;
+}
+
+.background__left {
+	background-size: cover;
+	width: 30vw;
+	height: 100vh;
+	background-image: url("../../assets/img/filmvisarna-background-left.jpg");
+}
+
+.background__right {
+	background-size: cover;
+	width: 30vw;
+	height: 100vh;
+	background-image: url("../../assets/img/filmvisarna-background-right.jpg");
+}
+
+.background__middle {
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	background: linear-gradient(90deg, rgba(0, 0, 0, 0.0) 0%, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%);
+}

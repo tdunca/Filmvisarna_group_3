@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const seatSchema = new mongoose.Schema({
     seatNumber: {
-        type: String,
+        type: Number,
         required: true,
     },
     rowNumber: {

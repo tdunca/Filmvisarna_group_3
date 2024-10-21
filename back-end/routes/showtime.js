@@ -5,9 +5,10 @@ import {
   getShowtimeById,
   updateShowtime,
   deleteShowtime,
-  getShowtimesByDateRange
+  getShowtimesByDateRange,
+  getShowtimeSeats
 } from '../controllers/showtimeController.js';
-// import { authAdmin } from '../middlewares/authAdmin.js'; // Om du har admin-autentisering
+// import { authAdmin } from '../middlewares/authAdmin.js'; //TODO: Implementera ACL
 
 const showtimeRouter = express.Router();
 
@@ -21,15 +22,18 @@ showtimeRouter.get('/', getShowtimes);
 // Hämta visningar inom datumintervall
 showtimeRouter.get('/date-range', getShowtimesByDateRange);
 
+// Hämta säten för visning
+showtimeRouter.get('/:id/seats', getShowtimeSeats);
+
 // Hämta specifik visning
 showtimeRouter.get('/:id', getShowtimeById);
 
 // Uppdatera visning (endast admin)
-// showtimeRouter.put('/:id', authAdmin, updateShowtime);
+// showtimeRouter.put('/:id', authAdmin, updateShowtime); //TODO: Implementera ACL
 showtimeRouter.put('/:id', updateShowtime);
 
 // Ta bort visning (endast admin)
-// showtimeRouter.delete('/:id', authAdmin, deleteShowtime);
+// showtimeRouter.delete('/:id', authAdmin, deleteShowtime); //TODO: Implementera ACL
 showtimeRouter.delete('/:id', deleteShowtime);
 
 export default showtimeRouter;
