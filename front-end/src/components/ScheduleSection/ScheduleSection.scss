@@ -33,12 +33,12 @@
       transition: background-color 0.3s, transform 0.2s;
 
       &:hover {
-        outline: 3px solid $color-success;
+        outline: 3px solid $color-select;
       }
 
       &.selected {
-        background-color: $color-success;
-        border: 1px solid $color-success;
+        background-color: $color-select;
+        border: 1px solid $color-select;
       }
 
       p {

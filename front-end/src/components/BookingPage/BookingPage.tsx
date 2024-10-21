@@ -341,7 +341,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
       </div>
 
       {showModal && (
-        <div className="modal">
+        <div className="booking-modal">
           <div className="modal-content">
             <h2>Bokningsbekräftelse</h2>
             {bookingStatus?.success ? (

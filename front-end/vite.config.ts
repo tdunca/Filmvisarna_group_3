@@ -17,12 +17,4 @@ export default defineConfig({
     }
   },
   plugins: [react()],
-  // build: {
-  //   cssCodeSplit: false,
-  //   rollupOptions: {
-  //     output: {
-  //       manualChunks: undefined,
-  //     },
-  //   },
-  // }
 })
