@@ -1,71 +1,40 @@
 import React from 'react';
-import './Header.scss';
-import Logo from '../../components/Logo/Logo';
-import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 import SearchIcon from '../../assets/icons/search_35dp_FCAF00_FILL0_wght400_GRAD0_opsz40.png';
-import LoginIcon from '../../assets/icons/person_35dp_FCAF00_FILL0_wght400_GRAD0_opsz40.png'
+
+import './Header.scss';
+import Logo from '../../assets/img/logo-text-under.png';
 
 const Header: React.FC = () => {
   return (
-    <header>
-      <div className="schedule-button-container">
-        <Button
-          variant="outlined"
-          sx={{
-            height: '80px',
-            width: '80px',
-            border: 'none',
-            borderRight: '2px solid #fcaf00',
-            color: '#fcaf00',
-          }}
-        >Idag</Button>
-        <Button
-          variant="outlined"
-          sx={{
-            height: '80px',
-            width: '80px',
-            border: 'none',
-            borderRight: '2px solid #fcaf00',
-            color: '#fcaf00',
-          }}
-        >Imorgon</Button>
-        <Button
-          variant="outlined"
-          sx={{
-            height: '80px',
-            width: '80px',
-            border: 'none',
-            borderRight: '2px solid #fcaf00',
-            color: '#fcaf00',
-          }}
-        >Senare</Button>
-      </div>
-      <div className='logo-container'>
-        <Logo />
-      </div>
-      <div className="search-login-container">
-        <Button
-          variant="outlined"
-          sx={{
-            height: '80px',
-            width: '80px',
-            border: 'none',
-            borderLeft: '2px solid #fcaf00',
-            color: '#fcaf00',
-          }}
-        ><img src={SearchIcon} alt="Search" style={{ height: '40px', width: '40px' }} /></Button>
-        <Button
-          variant="outlined"
-          sx={{
-            height: '80px',
-            width: '80px',
-            border: 'none',
-            borderLeft: '2px solid #fcaf00',
-            color: '#fcaf00',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        ><img src={LoginIcon} alt="Search" style={{ height: '40px', width: '40px'}}/>Login</Button>
+    <header className="header">
+      <div className="container-fluid">
+        <div className="row align-items-center flex-wrap">
+          <div className="col-12 col-md-4 d-flex justify-content-center justify-content-md-start mb-2 mb-md-0 flex-wrap">
+            <Link to="/" className="nav-link ">
+              IDAG
+            </Link>
+            <Link to="/" className="nav-link">
+              IMORGON
+            </Link>
+            <Link to="/" className="nav-link">
+              SENARE
+            </Link>
+          </div>
+
+          <div className="col-12 col-md-4 text-center mb-2 mb-md-0">
+            <img src={Logo} width={100} alt="Logo" />
+          </div>
+
+          <div className="col-12 col-md-4 d-flex justify-content-center justify-content-md-end flex-wrap">
+            <Link to="/" className="nav-link">
+              <img src={SearchIcon} width={30} alt="Search" />
+            </Link>
+            <Link to="/" className="nav-link">
+              LOGIN
+            </Link>
+          </div>
+        </div>
       </div>
     </header>
   );
