@@ -25,10 +25,10 @@ const TICKET_PRICES = {
 
 export const createBooking = async (req, res) => {
   try {
-    const { movieId, hallId, showtimeId, selectedSeats, email, tickets } = req.body;
+    const { showtimeId, selectedSeats, email, tickets } = req.body;
 
     // Validate input
-    if (!movieId || !hallId || !showtimeId || !selectedSeats || !email || !tickets) {
+    if ( !showtimeId || !selectedSeats || !email || !tickets) {
       return res.status(400).json({ error: 'Missing required booking information' });
     }
 
@@ -104,8 +104,8 @@ export const createBooking = async (req, res) => {
     // Create booking
     const booking = new Booking({
       user: user._id,
-      movie: movieId,
-      hall: hallId,
+      movie: showtime.movie._id,
+      hall: showtime.hall._id,
       bookedAt: [{
         date: showtime.date,
         time: showtime.time
