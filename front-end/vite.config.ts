@@ -6,10 +6,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `
-        @use "/src/sass/variables.scss" as *;
-        @use "/src/sass/mixins.scss" as *;
-        `,
+        additionalData: `@use "/src/sass" as *;`,
+        silenceDeprecations: ['legacy-js-api'],
       },
     },
   },
@@ -19,4 +17,12 @@ export default defineConfig({
     }
   },
   plugins: [react()],
+  // build: {
+  //   cssCodeSplit: false,
+  //   rollupOptions: {
+  //     output: {
+  //       manualChunks: undefined,
+  //     },
+  //   },
+  // }
 })
