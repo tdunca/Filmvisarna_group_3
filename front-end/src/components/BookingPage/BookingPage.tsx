@@ -181,8 +181,6 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        movieId: showtime?.movie._id,
-        hallId: showtime?.hall._id,
         showtimeId,
         selectedSeats: selectedSeatObjects.map(seat => seat.seat._id),
         email,
