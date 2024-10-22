@@ -166,15 +166,42 @@ import User from '../models/User.js';
     }
   }
 
-  export const getUserInfo = async (req, res) => {
-    try {
-      const user = await User.findById(req.user._id).populate("bookings").exec();
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-      res.status(200).json(user);
-    } catch (error) {
-      console.error('Error fetching user info:', error); // Log the error for debugging
-      res.status(500).json({ error: 'Server error' });
+export const getUserInfo = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate("bookings").exec();
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
+
+    // Konvertera användarobjektet till ett vanligt objekt och ta bort lösenordet
+    const { password, ...userWithoutPassword } = user.toObject();
+
+    res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    console.error('Error fetching user info:', error); // Log the error for debugging
+    res.status(500).json({ error: 'Server error' });
   }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { firstName, lastName } = req.body;
+    
+    const user = await User.findById(req.user._id);
+    
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+
+    await user.save();
+
+    const { password: _, ...updatedUser } = user.toObject();
+    res.status(200).json({ message: "Profile updated successfully", user: updatedUser });
+    
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
