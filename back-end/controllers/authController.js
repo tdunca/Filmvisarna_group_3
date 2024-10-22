@@ -3,13 +3,13 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 export const userRegister = async (req, res) => {
     try {
-      const { username, password, email, firstName, lastName, role } = req.body;
-      const user = await User.findOne({ username });
+      const { email, password, firstName, lastName, role } = req.body;
+      const user = await User.findOne({ email });
       if (user) {
         return res.status(400).json({ error: "User already exists" });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new User({ username, password: hashedPassword, email, firstName, lastName, role: role || "user" });
+      const newUser = new User({ email, password: hashedPassword, firstName, lastName, role: role || "user" });
       await newUser.save();
       res.status(201).json({ message: "User registered successfully", user: newUser });
     } catch (error) {
@@ -19,8 +19,8 @@ export const userRegister = async (req, res) => {
 
 export const userLogin = async (req, res) => {
     try {
-      const { username, password } = req.body;
-      const user = await User.findOne({ username });
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
       if (!user) {
         return res.status(400).json({ error: "User does not exist" });
       }
@@ -28,7 +28,7 @@ export const userLogin = async (req, res) => {
       if (!isPasswordValid) {
         return res.status(400).json({ error: "Invalid password" });
       }
-      const token = jwt.sign({ username }, process.env.JWT_SECRET);
+      const token = jwt.sign({ email }, process.env.JWT_SECRET);
       if (!token) {
         return res.status(500).json({ error: "Failed to generate token" });
       }
@@ -53,7 +53,7 @@ export const userLogin = async (req, res) => {
 export const resetPassword = async (req, res) => {
     try {
         const { username, oldPassword, newPassword } = req.body;
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ error: "User does not exist" });
         }
