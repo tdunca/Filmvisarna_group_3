@@ -5,7 +5,7 @@ import Booking from '../models/Booking.js';
 import { authUser } from '../middlewares/authUser.js';
 import Seat from '../models/Seat.js';
 import Showtime from '../models/Showtime.js';
-import { getTickets, getUserInfo, removeTicket, userInfoByTicket } from '../controllers/userController.js';
+import { getTickets, getUserInfo, removeTicket, userInfoByTicket, updateProfile } from '../controllers/userController.js';
 import { createBooking, getAvailableSeats } from '../controllers/bookingController.js';
 const userRouter = express.Router();
 
@@ -25,6 +25,9 @@ userRouter.get('/tickets', authUser, getTickets); // SORT ROUTES - /api/ticket s
 userRouter.get('/ticket/:bookingNumber', authUser, userInfoByTicket);
 
 userRouter.get("/info", authUser, getUserInfo);
+
+//update profile
+userRouter.post("/update-profile", authUser, updateProfile)
 
 // userRouter.post('/bookings', createBooking);
 // userRouter.get('/booking/:showtimeId', authUser, getAvailableSeats);

@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     password: {
         type: String,
         required: true,
@@ -16,8 +11,21 @@ const userSchema = new mongoose.Schema({
         unique: true,
     },
     bookings: {
-        type: [String], 
+        type: [String],
         default: [],
+    },
+    firstName: {
+        type: String,
+        required: false,
+    },
+    lastName: {
+        type: String,
+        required: false,
+    },
+    role: {
+        type: String,
+        enum: ["admin", "user"],
+        default: "user",
     },
 }, { timestamps: true });
 
