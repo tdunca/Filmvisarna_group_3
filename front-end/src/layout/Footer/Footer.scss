@@ -1,4 +1,3 @@
-// @import '../../sass/variables.scss';
 .footer {
   background-color: $color-primary-dark;
   padding: 10px;
@@ -6,11 +5,13 @@
   border-radius: 10px;
   z-index: 1;
 
-  h5 {
+  h5,
+  p {
     color: $color-secondary;
   }
 
   .list-unstyled {
+    color: $color-secondary;
     padding-left: 0;
     li {
       margin-bottom: 10px;

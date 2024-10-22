@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 
-const ticketSchema = new mongoose.Schema({
+const ticketBookingSchema = new mongoose.Schema({
     type: {
         type: String,
-        enum: ['adult', 'senior', 'child'],
         required: true
     },
     quantity: {
@@ -49,7 +48,7 @@ const bookingSchema = new mongoose.Schema({
         ref: 'Seat',
         required: true,
     },
-    tickets: [ticketSchema],
+    tickets: [ticketBookingSchema],
     totalAmount: {
         type: Number,
         required: true

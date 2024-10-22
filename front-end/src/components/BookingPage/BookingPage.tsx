@@ -50,6 +50,12 @@ interface Showtime {
   time: string;
 }
 
+interface TicketType {
+  _id: string;
+  type: string;
+  price: number;
+}
+
 interface BookingPageProps {
   showtimeId: string | undefined;
 }
@@ -63,27 +69,29 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [email, setEmail] = useState<string>('');
-  const [ticketCounts, setTicketCounts] = useState({ adult: 0, child: 0, senior: 0 });
   const [ageConfirmation, setAgeConfirmation] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [bookingStatus, setBookingStatus] = useState<{ success: boolean; message?: string; bookingNumber?: string } | null>(null);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
+  const [ticketCounts, setTicketCounts] = useState<Record<string, number>>({});
+
+  const ORDINARY_PRICE = 140;
 
   useEffect(() => {
     if (showtimeId) {
       fetchShowtimeDetails();
       fetchAvailableSeats();
+      fetchTicketTypes();
     }
   }, [showtimeId]);
 
   useEffect(() => {
-    // Calculate total amount based on ticket counts
-    const adultPrice = 140;
-    const childPrice = 80;
-    const seniorPrice = 120;
-    const total = (ticketCounts.adult * adultPrice) + (ticketCounts.child * childPrice) + (ticketCounts.senior * seniorPrice);
+    const total = ticketTypes.reduce((sum, ticketType) => {
+      return sum + (ticketCounts[ticketType.type] || 0) * ticketType.price;
+    }, 0);
     setTotalAmount(total);
-  }, [ticketCounts]);
+  }, [ticketCounts, ticketTypes]);
 
   const fetchShowtimeDetails = async () => {
     setLoading(true);
@@ -135,7 +143,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
   };
 
   const handleSeatClick = (seatId: string) => {
-  const totalTickets = ticketCounts.adult + ticketCounts.child + ticketCounts.senior;
+  const totalTickets = Object.values(ticketCounts).reduce((sum, count) => sum + count, 0);
   if (selectedSeats.includes(seatId)) {
     // If the seat is already selected, remove it
     setSelectedSeats((prev) => prev.filter((id) => id !== seatId));
@@ -158,6 +166,26 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
     }, {} as Record<number, Seat[]>);
   };
 
+  const fetchTicketTypes = async () => {
+    try {
+      const response = await fetch('/api/ticket');
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch ticket types');
+      }
+      setTicketTypes(data);
+      // Initialize ticket counts
+      const initialCounts: Record<string, number> = {};
+      data.forEach((ticket: TicketType) => {
+        initialCounts[ticket.type] = 0;
+      });
+      setTicketCounts(initialCounts);
+    } catch (err: any) {
+      console.error('Error fetching ticket types:', err);
+      setError(err.message);
+    }
+  };
+
   const handleBooking = async () => {
   if (!email || selectedSeats.length === 0 || !ageConfirmation) {
     setError('Please select seats, enter your email, and confirm age');
@@ -165,13 +193,12 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
   }
 
   try {
-    const tickets = [
-      { type: 'adult', quantity: ticketCounts.adult },
-      { type: 'senior', quantity: ticketCounts.senior },
-      { type: 'child', quantity: ticketCounts.child },
-    ];
-
-     // Filter out only the selected seats
+    const tickets = ticketTypes.map(ticketType => ({
+      type: ticketType.type,
+      quantity: ticketCounts[ticketType.type] || 0
+    }));
+    
+    // Filter out only the selected seats
     const selectedSeatObjects = seats.filter(seat => selectedSeats.includes(seat._id));
 
     const response = await fetch('/api/user/bookings', {
@@ -250,31 +277,17 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
         <div className="ticket-counts">
           {/* <h3>Välj biljetter</h3> */}
           <div className="ticket-counts__tickets">
-            <div className="ticket-counts__tickets__ticket">
-              <label>Vuxen </label>
-              <div className="ticket-counts__tickets__ticket__button-container">
-                <button onClick={() => setTicketCounts((prev) => ({ ...prev, adult: Math.max(0, prev.adult - 1) }))}>-</button>
-                <span>{ticketCounts.adult}</span>
-                <button onClick={() => setTicketCounts((prev) => ({ ...prev, adult: prev.adult + 1 }))}>+</button>
+            {ticketTypes.map((ticketType) => (
+              <div key={ticketType._id} className="ticket-counts__tickets__ticket">
+                <label>{ticketType.type} </label>
+                <div className="ticket-counts__tickets__ticket__button-container">
+                  <button onClick={() => setTicketCounts((prev) => ({ ...prev, [ticketType.type]: Math.max(0, (prev[ticketType.type] || 0) - 1) }))}>-</button>
+                  <span>{ticketCounts[ticketType.type] || 0}</span>
+                  <button onClick={() => setTicketCounts((prev) => ({ ...prev, [ticketType.type]: (prev[ticketType.type] || 0) + 1 }))}>+</button>
+                </div>
               </div>
-            </div>
-          <div className="ticket-counts__tickets__ticket">
-              <label>Barn </label>
-              <div className="ticket-counts__tickets__ticket__button-container">
-                <button onClick={() => setTicketCounts((prev) => ({ ...prev, child: Math.max(0, prev.child - 1) }))}>-</button>
-                <span>{ticketCounts.child}</span>
-                <button onClick={() => setTicketCounts((prev) => ({ ...prev, child: prev.child + 1 }))}>+</button>
-              </div>
-              </div>
-          <div className="ticket-counts__tickets__ticket">
-              <label>Pensionär </label>
-              <div className="ticket-counts__tickets__ticket__button-container">
-                <button onClick={() => setTicketCounts((prev) => ({ ...prev, senior: Math.max(0, prev.senior - 1) }))}>-</button>
-                <span>{ticketCounts.senior}</span>
-                <button onClick={() => setTicketCounts((prev) => ({ ...prev, senior: prev.senior + 1 }))}>+</button>
-              </div>
-            </div>
-            </div>
+            ))}
+          </div>
         </div>
 
         {/* Section 3: Seat Selection */}
@@ -362,15 +375,36 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
       )}
       {/* Section 6: Total Amount - Aside */}
       <div className="total-amount-aside">
-          <div className="total-amount">
-            <h3>Ordinarie: {ticketCounts.adult} st {ticketCounts.adult * 140} kr</h3>
-            <h3>Barn: {ticketCounts.child} st {ticketCounts.child * 80} kr</h3>
-            <h3>Pensionär: {ticketCounts.senior} st {ticketCounts.senior * 120} kr</h3>
-            <h3> Ordinarie pris {(ticketCounts.adult + ticketCounts.child + ticketCounts.senior) * 140} kr</h3>
-            <h3> Totalt prisavdrag {((ticketCounts.adult + ticketCounts.child + ticketCounts.senior) * 140) - Number(totalAmount)} </h3>
-            <h2>Att betala: {totalAmount} SEK</h2>
+        <div className="total-amount">
+          {ticketTypes.map((ticketType) => (
+            <h3 key={ticketType._id}>
+              {ticketType.type}: {ticketCounts[ticketType.type] || 0} st {(ticketCounts[ticketType.type] || 0) * ticketType.price} kr
+            </h3>
+          ))}
+          {/* <h3>Ordinarie pris {ticketTypes.reduce((sum, ticketType) => sum + ((ticketCounts[ticketType.type] || 0) * ticketType.price), 0)} kr</h3> */}
+          {/* Beräkna det totala ordinarie priset baserat på antal biljetter */}
+          <h3>
+            Ordinarie pris:{" "}
+            {Object.values(ticketCounts).reduce(
+              (sum, count) => sum + (count || 0) * ORDINARY_PRICE,
+              0
+            )}{" "}
+            kr
+          </h3>
+          
+          {/* <h3>Totalt prisavdrag {ticketTypes.reduce((sum, ticketType) => sum + ((ticketCounts[ticketType.type] || 0) * ticketType.price), 0) - totalAmount} kr</h3> */}
+          {/* Beräkna prisavdraget: ordinarie pris minus det nuvarande totalbeloppet */}
+          <h3>
+            Totalt prisavdrag:{" "}
+            {Object.values(ticketCounts).reduce(
+              (sum, count) => sum + (count || 0) * ORDINARY_PRICE,
+              0
+            ) - totalAmount}{" "}
+            kr
+          </h3>
+          <h2>Att betala: {totalAmount} SEK</h2>
         </div>
-        </div>
+      </div>
     </div>
   );
 };

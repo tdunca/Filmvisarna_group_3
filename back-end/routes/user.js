@@ -18,7 +18,7 @@ userRouter.delete('/remove-ticket/:bookingNumber', authUser, removeTicket);
 
 // get all tickets of a user
 // /api/user/tickets
-userRouter.get('/tickets', authUser, getTickets);
+userRouter.get('/tickets', authUser, getTickets); // SORT ROUTES - /api/ticket should view ticket types, and booking for bookings
 
 // get user info by ticket booking number 
 // /api/user/ticket/:bookingNumber
