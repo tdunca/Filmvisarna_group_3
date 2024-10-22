@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export const authUser = async (req, res, next) => {
     try {
-        
+
         const token = req.cookies.token;
         if (!token) {
             return res.status(401).json({ error: "Unauthorized: No token provided" });
@@ -13,7 +13,7 @@ export const authUser = async (req, res, next) => {
         if (!decoded) {
             return res.status(401).json({ error: "Unauthorized: Invalid token" });
         }
-        const user = await User.findOne({ username: decoded.username }).select("-password");
+        const user = await User.findOne({ email: decoded.email }).select("-password");
         if (!user) {
             return res.status(401).json({ error: "Unauthorized: User not found" });
         }
