@@ -16,8 +16,8 @@
   }
 
   .schedule-section-buttons {
-    display: flex;
-    // grid-template-columns: repeat(7, 1fr);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
     justify-content: space-between;
     flex-wrap: wrap;
 
