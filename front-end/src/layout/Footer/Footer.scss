@@ -6,11 +6,13 @@
   border-radius: 10px;
   z-index: 1;
 
-  h5 {
+  h5,
+  p {
     color: $color-secondary;
   }
 
   .list-unstyled {
+    color: $color-secondary;
     padding-left: 0;
     li {
       margin-bottom: 10px;
