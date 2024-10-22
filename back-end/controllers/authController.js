@@ -52,7 +52,7 @@ export const userLogin = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        const { username, oldPassword, newPassword } = req.body;
+        const { email, oldPassword, newPassword } = req.body;
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ error: "User does not exist" });
