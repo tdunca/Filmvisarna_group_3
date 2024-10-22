@@ -16,8 +16,21 @@ const userSchema = new mongoose.Schema({
         unique: true,
     },
     bookings: {
-        type: [String], 
+        type: [String],
         default: [],
+    },
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    },
+    role: {
+        type: String,
+        enum: ["admin", "user"],
+        default: "user",
     },
 }, { timestamps: true });
 
