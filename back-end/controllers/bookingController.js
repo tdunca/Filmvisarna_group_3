@@ -62,8 +62,7 @@ export const createBooking = async (req, res) => {
       
       user = new User({
         email,
-        password: hashedPassword,
-        username: email.split('@')[0]
+        password: hashedPassword
       });
       await user.save();
 
@@ -76,7 +75,7 @@ export const createBooking = async (req, res) => {
         <h2>Välkommen till MonsterBio!</h2>
         <p>Du kan logga in på MonsterBio för att hantera dina biljettbokningar.</p>
         <p>Här är dina inloggninguppgifer:</p>
-        <p>Anändarnamn: ${user.username} </p>
+        <p>E-post: ${user.email} </p>
         <p>Lösenord: ${tempPassword}</p>`
       });
     }
