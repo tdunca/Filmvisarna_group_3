@@ -8,6 +8,7 @@ import hallrouter from "./routes/hall.js";
 import movierouter from "./routes/movie.js";
 import userRouter from "./routes/user.js";
 import showtimeRouter from "./routes/showtime.js";
+import ticketRouter from "./routes/ticket.js";
 dotenv.config();
 
 const app = express();
@@ -20,6 +21,7 @@ app.use("/api/hall", hallrouter);
 app.use("/api/movie", movierouter);
 app.use("/api/user", userRouter);
 app.use("/api/showtime", showtimeRouter);
+app.use("/api/ticket", ticketRouter);
 app.listen(process.env.PORT || 5001, () => {
   try {
     connectDB();

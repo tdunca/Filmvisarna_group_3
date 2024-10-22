@@ -4,6 +4,7 @@ import Booking from '../models/Booking.js';
 import Seat from '../models/Seat.js';
 import Showtime from '../models/Showtime.js';
 import User from '../models/User.js';
+import Ticket from '../models/Ticket.js';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
@@ -16,12 +17,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   }
 });
-
-const TICKET_PRICES = {
-  adult: 140,
-  senior: 120,
-  child: 80
-};
 
 export const createBooking = async (req, res) => {
   try {
@@ -38,17 +33,25 @@ export const createBooking = async (req, res) => {
       return res.status(400).json({ error: 'Number of tickets does not match number of selected seats' });
     }
 
-    // Calculate total amount
-    const totalAmount = tickets.reduce((sum, ticket) => {
-      return sum + (TICKET_PRICES[ticket.type] * ticket.quantity);
-    }, 0);
+    // Fetch all ticket types
+    const ticketTypes = await Ticket.find();
+    const ticketPrices = Object.fromEntries(ticketTypes.map(ticket => [ticket.type, ticket.price]));
 
-    // Process tickets with prices
-    const processedTickets = tickets.map(ticket => ({
-      type: ticket.type,
-      quantity: ticket.quantity,
-      price: TICKET_PRICES[ticket.type]
-    }));
+    // Calculate total amount and process tickets with prices
+    let totalAmount = 0;
+    const processedTickets = [];
+    for (const ticket of tickets) {
+      const price = ticketPrices[ticket.type];
+      if (!price) {
+        return res.status(400).json({ error: `Invalid ticket type: ${ticket.type}` });
+      }
+      totalAmount += price * ticket.quantity;
+      processedTickets.push({
+        type: ticket.type,
+        quantity: ticket.quantity,
+        price: price
+      });
+    }
 
     // Find or create user
     let user = await User.findOne({ email });
