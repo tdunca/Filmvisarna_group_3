@@ -1,28 +1,44 @@
 .header {
   background-color: $color-primary-dark;
-  padding: 10px;
+  padding: 0px;
   border: 2px solid $color-secondary;
   border-radius: 10px;
   z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 10;
+  right: 10;
+  width: 80%;
+  transition: opacity 0.3s;
+
+  .container-fluid {
+    padding: 0 0px;
+  }
 
   .nav-link {
-    padding: 10px 15px;
+    padding: 25px 19px;
+    width: 100px;
+    text-align: center;
+    display: inline-block;
     border: 2px solid $color-secondary;
-    border-radius: 10px;
-    margin: 0 3px;
+    border-radius: 3px;
+    margin: 0px;
     color: $color-secondary;
+    transition: background-color 0.3s, color 0.3s;
 
     &:hover {
       background-color: $color-secondary;
       color: $color-white;
+      font-size: larger;
     }
   }
 
-  .Search-img {
-    padding: 10px 15px;
+  .search-img {
+    padding: 22px 15px;
     border: 2px solid $color-secondary;
-    border-radius: 10px;
-    margin: 0 3px;
+    border-radius: 2px;
+
+    margin: 0px;
     color: $color-secondary;
 
     &:hover {
@@ -30,13 +46,15 @@
     }
   }
 
-  .Search-image {
-    max-width: 100%;
-    height: auto;
+  .search-image,
+  .person-image {
     transition: transform 0.3s;
-
     &:hover {
       transform: scale(2.05);
     }
   }
+}
+
+body {
+  margin-top: 60px; // Body based on the height of your header
 }

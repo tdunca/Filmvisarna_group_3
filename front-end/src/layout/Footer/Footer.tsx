@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="container-fluid">
         <div className="row text-light">
-          <div className="col-md-3">
+          <div className="col-sm-3">
             <h5>Om oss</h5>
             <ul className="list-unstyled">
               <li>
@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          <div className="col md-3">
+          <div className="col-sm-3">
             <h5>Öppettider</h5>
             <ul className="list-unstyled">
               <li>Måndag - Torsdag: 08:00 - 01:00</li>
@@ -37,31 +37,31 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          <div className="col-md-3">
+          <div className="col-sm-3">
             <h5>Adress:</h5>
             <p>Smågatan 5, Småstad</p>
           </div>
 
-          <div className="col-md-3 text-center">
+          <div className="col-sm-3 text-center">
             <h5>Sociala medier</h5>
             <div className="social-media-links">
-              <a title="facebook" href="www.facebook.com">
+              <a title="facebook" href="https://www.facebook.com">
                 <img src={facebookIcon} alt="" />
               </a>
-              <a title="instagram" href="www.instagram.com">
+              <a title="instagram" href="https://www.instagram.com">
                 <img src={instagramIcon} alt="" />
               </a>
-              <a title="X" href="www.x.com">
+              <a title="X" href="https://www.x.com">
                 <img src={XIcon} alt="" />
               </a>
-              <a title="youtube" href="#">
+              <a title="youtube" href="https://www.youtube.com">
                 <img src={youtubeIcon} alt="" />
               </a>
             </div>
           </div>
 
           <div className="row justify-content-center mt-4">
-            <div className="col-md-12">
+            <div className="col-sm-12">
               <img src={Logo} width={200} alt="Logo" />
             </div>
           </div>
