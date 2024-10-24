@@ -8,10 +8,10 @@ import Logo from '../../assets/img/logo-text-side.png';
 
 const Header: React.FC = () => {
   return (
-    <header className="header">
+    <header className="header position-fixed">
       <div className="container-fluid">
-        <div className="row align-items-center flex-wrap">
-          <div className="col-12 col-sm-4 d-flex justify-content-center justify-content-md-start mb-2 mb-md-0 flex-wrap">
+        <div className="row">
+          <div className="col-sm-4">
             <Link to="/" className="nav-link">
               Idag
             </Link>
@@ -23,13 +23,13 @@ const Header: React.FC = () => {
             </Link>
           </div>
 
-          <div className="col-12 col-sm-4 text-center mb-2 mb-md-0">
+          <div className="col-sm-4 text-center ">
             <Link to="/">
               <img src={Logo} width={200} alt="Logo" />
             </Link>
           </div>
 
-          <div className="col-12 col-sm-4 d-flex justify-content-center justify-content-md-end flex-wrap">
+          <div className="col-sm-4 d-flex justify-content-end">
             <Link to="/" className="search-img">
               <img
                 src={SearchIcon}
