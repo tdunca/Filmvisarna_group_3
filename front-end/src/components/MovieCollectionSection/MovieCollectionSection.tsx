@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MovieComponent from '../MovieComponent/MovieComponent';
 import Button from '../FrontPageButton/FrontPageButton';
 import './MovieCollectionSection.scss';
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 interface Movie {
   _id: string;
@@ -13,7 +14,7 @@ interface Movie {
 }
 
 const MovieCollectionSection: React.FC = () => {
-  const [movies, setMovies] = useState<Movie[]>([]); // Use the Movie interface here
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [filterField, setFilterField] = useState<string | null>(null);
@@ -49,7 +50,6 @@ const MovieCollectionSection: React.FC = () => {
   const filteredMovies = filterField && filterValue
     ? movies.filter((movie) => {
         const fieldValue = movie[filterField as keyof Movie];
-        // Handle array type for genre
         return Array.isArray(fieldValue)
           ? fieldValue.includes(filterValue)
           : fieldValue === filterValue;
@@ -57,25 +57,30 @@ const MovieCollectionSection: React.FC = () => {
     : movies;
 
   return (
-    <div>
+    <div className="container py-5">
       <section className="movie-collection-section">
-        <div className="sorting-button-container">
-          <Button className="sortingButton" text="Alla Filmer" onClick={() => handleFilter(null, null)} />
-          <Button className="sortingButton" text="Barn & Familj" onClick={() => handleFilter('genre', 'Family')} />
-          <Button className="sortingButton" text="Senaste" onClick={() => handleFilter('year', '2024')} />
-          <Button className="sortingButton" text="Klassiker" onClick={() => handleFilter('genre', 'Classics')} />
+        
+        
+        <div className="sorting-button-container text-center mb-4">
+          <Button className="btn btn-primary mx-2" text="Alla Filmer" onClick={() => handleFilter(null, null)} />
+          <Button className="btn btn-secondary mx-2" text="Barn & Familj" onClick={() => handleFilter('genre', 'Family')} />
+          <Button className="btn btn-secondary mx-2" text="Senaste" onClick={() => handleFilter('year', '2024')} />
+          <Button className="btn btn-secondary mx-2" text="Klassiker" onClick={() => handleFilter('genre', 'Classics')} />
         </div>
-        <div className="movie-grid">
+        
+        
+        <div className="row">
           {filteredMovies.map((movie) => (
-            <MovieComponent
-              key={movie._id}
-              _id={movie._id}
-              title={movie.title}
-              year={movie.year}
-              poster={movie.poster}
-              genre={movie.genre}
-              ageRestriction={movie.ageRestriction}
-            />
+            <div key={movie._id} className="col-sm-6 col-md-4 col-lg-2 mb-4">
+              <MovieComponent
+                _id={movie._id}
+                title={movie.title}
+                year={movie.year}
+                poster={movie.poster}
+                genre={movie.genre}
+                ageRestriction={movie.ageRestriction}
+              />
+            </div>
           ))}
         </div>
       </section>
