@@ -157,6 +157,21 @@ export const getShowtimes = async (req, res) => {
       .populate('hall')
       .sort({ date: 1, time: 1 });
 
+    // Om både movieId och datumintervall finns, gruppera efter datum
+    if (movieId && startDate && endDate) {
+      const groupedShowtimes = showtimes.reduce((acc, showtime) => {
+        const dateStr = showtime.date.toISOString().split('T')[0];
+        if (!acc[dateStr]) {
+          acc[dateStr] = [];
+        }
+        acc[dateStr].push(showtime);
+        return acc;
+      }, {});
+
+      return res.status(200).json(groupedShowtimes);
+    }
+
+    // Annars returnera som vanlig array
     res.status(200).json(showtimes);
 
   } catch (error) {
