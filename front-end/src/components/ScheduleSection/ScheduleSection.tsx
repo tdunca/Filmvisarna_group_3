@@ -23,9 +23,10 @@ interface Showtime {
 
 interface ScheduleSectionProps {
   date: Date | null;
+  movieId?: string;
 }
 
-const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date }) => {
+const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date, movieId }) => {
   const [showtimes, setShowtimes] = useState<{ [key: string]: Showtime[] }>({});
 
   const today = new Date().toISOString().split('T')[0];
@@ -42,9 +43,12 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date }) => {
 
     const fetchShowtimes = async () => {
       try {
-        const response = await fetch(
-          `/api/showtime/date-range?startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`
-        );
+        // Kontrollera om movieId finns, och välj endpoint därefter
+        const endpoint = movieId
+          ? `/api/showtime?movieId=${movieId}&startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`
+          : `/api/showtime/date-range?startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`;
+        
+        const response = await fetch(endpoint);
         const data = await response.json();
         setShowtimes(data);
       } catch (error) {
@@ -53,7 +57,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date }) => {
     };
 
     fetchShowtimes();
-  }, [date]);
+  }, [date, movieId]);
 
    // Funktion för att beräkna sluttiden baserat på starttid och längd
   const calculateEndTime = (startTime: string, length: number) => {
