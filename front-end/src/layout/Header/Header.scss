@@ -3,13 +3,12 @@
   padding: 0px;
   border: 2px solid $color-secondary;
   border-radius: 10px;
-  z-index: 1;
-  position: fixed;
-  top: 0;
-  left: 10;
-  right: 10;
   width: 80%;
-  transition: opacity 0.3s;
+  margin: 0 auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 
   .container-fluid {
     padding: 0 0px;
@@ -21,24 +20,20 @@
     text-align: center;
     display: inline-block;
     border: 2px solid $color-secondary;
-    border-radius: 3px;
-    margin: 0px;
+    border-radius: 2px;
     color: $color-secondary;
-    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
 
     &:hover {
       background-color: $color-secondary;
       color: $color-white;
-      font-size: larger;
     }
   }
 
   .search-img {
-    padding: 22px 15px;
+    padding: 21px 21px;
     border: 2px solid $color-secondary;
     border-radius: 2px;
-
-    margin: 0px;
     color: $color-secondary;
 
     &:hover {
