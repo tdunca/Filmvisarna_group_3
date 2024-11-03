@@ -72,7 +72,11 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
   const [email, setEmail] = useState<string>('');
   const [ageConfirmation, setAgeConfirmation] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [bookingStatus, setBookingStatus] = useState<{ success: boolean; message?: string; bookingNumber?: string } | null>(null);
+  const [bookingStatus, setBookingStatus] = useState<{
+    success: boolean;
+    message?: string;
+    bookingNumber?: string;
+  } | null>(null);
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
   const [ticketCounts, setTicketCounts] = useState<Record<string, number>>({});
@@ -144,17 +148,20 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
   };
 
   const handleSeatClick = (seatId: string) => {
-  const totalTickets = Object.values(ticketCounts).reduce((sum, count) => sum + count, 0);
-  if (selectedSeats.includes(seatId)) {
-    // If the seat is already selected, remove it
-    setSelectedSeats((prev) => prev.filter((id) => id !== seatId));
-  } else if (selectedSeats.length < totalTickets) {
-    // Add the seat only if the number of selected seats is less than the total ticket count
-    setSelectedSeats((prev) => [...prev, seatId]);
-  } else {
-    alert('You have selected the maximum number of seats allowed.');
-  }
-};
+    const totalTickets = Object.values(ticketCounts).reduce(
+      (sum, count) => sum + count,
+      0
+    );
+    if (selectedSeats.includes(seatId)) {
+      // If the seat is already selected, remove it
+      setSelectedSeats((prev) => prev.filter((id) => id !== seatId));
+    } else if (selectedSeats.length < totalTickets) {
+      // Add the seat only if the number of selected seats is less than the total ticket count
+      setSelectedSeats((prev) => [...prev, seatId]);
+    } else {
+      alert('You have selected the maximum number of seats allowed.');
+    }
+  };
 
   const groupSeatsByRow = (seats: Seat[]) => {
     return seats.reduce((acc, seat) => {
@@ -188,56 +195,56 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
   };
 
   const handleBooking = async () => {
-  if (!email || selectedSeats.length === 0 || !ageConfirmation) {
-    setError('Please select seats, enter your email, and confirm age');
-    return;
-  }
-
-  try {
-    const tickets = ticketTypes.map(ticketType => ({
-      type: ticketType.type,
-      quantity: ticketCounts[ticketType.type] || 0
-    }));
-    
-    // Filter out only the selected seats
-    const selectedSeatObjects = seats.filter(seat => selectedSeats.includes(seat._id));
-
-    const response = await fetch('/api/user/bookings', {
-
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        showtimeId,
-        selectedSeats: selectedSeatObjects.map(seat => seat.seat._id),
-        email,
-        tickets,
-        totalAmount,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to create booking');
+    if (!email || selectedSeats.length === 0 || !ageConfirmation) {
+      setError('Please select seats, enter your email, and confirm age');
+      return;
     }
 
-    setBookingStatus({
-      success: true,
-      bookingNumber: data.booking.bookingNumber,
-    });
+    try {
+      const tickets = ticketTypes.map((ticketType) => ({
+        type: ticketType.type,
+        quantity: ticketCounts[ticketType.type] || 0
+      }));
 
-    setShowModal(true); // Visa modalen med bokningsinformation
-  } catch (err: any) {
-    console.error('Error creating booking:', err);
-    setBookingStatus({
-      success: false,
-      message: err.message,
-    });
-  }
-};
+      // Filter out only the selected seats
+      const selectedSeatObjects = seats.filter((seat) =>
+        selectedSeats.includes(seat._id)
+      );
 
+      const response = await fetch('/api/user/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          showtimeId,
+          selectedSeats: selectedSeatObjects.map((seat) => seat.seat._id),
+          email,
+          tickets,
+          totalAmount
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create booking');
+      }
+
+      setBookingStatus({
+        success: true,
+        bookingNumber: data.booking.bookingNumber
+      });
+
+      setShowModal(true); // Visa modalen med bokningsinformation
+    } catch (err: any) {
+      console.error('Error creating booking:', err);
+      setBookingStatus({
+        success: false,
+        message: err.message
+      });
+    }
+  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -254,159 +261,213 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
 
   return (
     <Container className="g-0 p-0">
-      <Row className="w-100 g-0">
-      <div className="booking-information col-md-12 col-lg-8 g-0">
-
+      <Row className="w-100 g-0 p-3">
+        <div className="booking-information col-md-12 col-lg-8 g-0">
           {/* Section 1: Showtime Info */}
-        <div className="booking-information-header col-12">
-          <div className="booking-information-header__poster col-4">
-            <img src={movie?.poster} alt={movie?.title} />
+          <div className="booking-information-header col-12">
+            <div className="booking-information-header__poster col-4">
+              <img src={movie?.poster} alt={movie?.title} />
             </div>
-          <div className="booking-information-header-container col-8">
-            <div className="booking-information-header__top">
-            <h1>{movie?.title}</h1>
-              <p>Tal: {movie?.language}, Undertexter: {movie?.subtitles}</p>
-              <p>Genre: {movie?.genre.join(', ')}</p>
-              <p>Speltid: {movie?.length} minuter</p>
-            </div>
-            <div className="booking-information-header__bottom">
-              <p><img src={dateIcon} alt="date" />Datum: {showtime && new Date(showtime.date).toLocaleDateString()}</p>
-              <p><img src={timeIcon} alt="time" />kl {showtime?.time}</p>
-              <p><img src={hallIcon} alt="hall" />Salong: {showtime?.hall.hallName}</p>
-            </div>
-          </div>
-        </div>
-        {/* Section 2: Ticket Selection */}
-        <div className="ticket-counts">
-          {/* <h3>Välj biljetter</h3> */}
-          <div className="ticket-counts__tickets">
-            {ticketTypes.map((ticketType) => (
-              <div key={ticketType._id} className="ticket-counts__tickets__ticket">
-                <label>{ticketType.type} </label>
-                <div className="ticket-counts__tickets__ticket__button-container">
-                  <button onClick={() => setTicketCounts((prev) => ({ ...prev, [ticketType.type]: Math.max(0, (prev[ticketType.type] || 0) - 1) }))}>-</button>
-                  <span>{ticketCounts[ticketType.type] || 0}</span>
-                  <button onClick={() => setTicketCounts((prev) => ({ ...prev, [ticketType.type]: (prev[ticketType.type] || 0) + 1 }))}>+</button>
-                </div>
+            <div className="booking-information-header-container col-8">
+              <div className="booking-information-header__top">
+                <h1>{movie?.title}</h1>
+                <p>
+                  Tal: {movie?.language}, Undertexter: {movie?.subtitles}
+                </p>
+                <p>Genre: {movie?.genre.join(', ')}</p>
+                <p>Speltid: {movie?.length} minuter</p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Section 3: Seat Selection */}
-        <div className="booking-information-content col-12">
-        <h3>Välj platser</h3>
-        <div className="seat-grid col-12">
-          {Object.entries(groupSeatsByRow(seats)).map(([rowNumber, rowSeats]) => (
-            <div className="seat-row col-12" key={rowNumber}>
-              {rowSeats
-                .sort((a, b) => b.seat.seatNumber - a.seat.seatNumber) // Sort seats in descending order
-                .map((seat) => (
-                  <button
-                    key={seat._id}
-                    onClick={() => !seat.isBooked && handleSeatClick(seat._id)}
-                    className={`seat-button ${seat.isBooked ? 'unavailable' : (selectedSeats.includes(seat._id) ? 'selected' : '')}`}
-                    disabled={seat.isBooked}
-                  >
-                    {seat.seat.seatNumber}
-                  </button>
-                ))}
+              <div className="booking-information-header__bottom">
+                <p>
+                  <img src={dateIcon} alt="date" />
+                  Datum:{' '}
+                  {showtime && new Date(showtime.date).toLocaleDateString()}
+                </p>
+                <p>
+                  <img src={timeIcon} alt="time" />
+                  kl {showtime?.time}
+                </p>
+                <p>
+                  <img src={hallIcon} alt="hall" />
+                  Salong: {showtime?.hall.hallName}
+                </p>
+              </div>
             </div>
-          ))}
-        </div>
-
-          {/* Section 4: Contact Information */}
-          <div className="contact-info">
-            <h3>Biljettleverans</h3>
-            <p>För att boka biljetter, ange din e-postadress.</p>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="email-input"
-            />
           </div>
-
-          {/* Section 5: Age Confirmation */}
-          <div className="age-confirmation">
-            <div className="age-confirmation-inner-box">
-              <label>
-                <div className="checkbox-container">
-              <input
-                type="checkbox"
-                checked={ageConfirmation}
-                onChange={() => setAgeConfirmation(!ageConfirmation)}
-                  />
-                </div>
-                <div className="checkbox-label">
-                  Jag är medveten om filmer kan ha åldersgränser. Barn som har fyllt 11 år får medfölja i vuxens sällskap. Ålder ska kunna styrkas med giltig legitimation.
+          {/* Section 2: Ticket Selection */}
+          <div className="ticket-counts">
+            {/* <h3>Välj biljetter</h3> */}
+            <div className="ticket-counts__tickets">
+              {ticketTypes.map((ticketType) => (
+                <div
+                  key={ticketType._id}
+                  className="ticket-counts__tickets__ticket"
+                >
+                  <label>{ticketType.type} </label>
+                  <div className="ticket-counts__tickets__ticket__button-container">
+                    <button
+                      onClick={() =>
+                        setTicketCounts((prev) => ({
+                          ...prev,
+                          [ticketType.type]: Math.max(
+                            0,
+                            (prev[ticketType.type] || 0) - 1
+                          )
+                        }))
+                      }
+                    >
+                      -
+                    </button>
+                    <span>{ticketCounts[ticketType.type] || 0}</span>
+                    <button
+                      onClick={() =>
+                        setTicketCounts((prev) => ({
+                          ...prev,
+                          [ticketType.type]: (prev[ticketType.type] || 0) + 1
+                        }))
+                      }
+                    >
+                      +
+                    </button>
                   </div>
-              </label>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="book-button-container">
+
+          {/* Section 3: Seat Selection */}
+          <div className="booking-information-content col-12">
+            <h3>Välj platser</h3>
+            <div className="seat-grid col-12">
+              {Object.entries(groupSeatsByRow(seats)).map(
+                ([rowNumber, rowSeats]) => (
+                  <div className="seat-row col-12" key={rowNumber}>
+                    {rowSeats
+                      .sort((a, b) => b.seat.seatNumber - a.seat.seatNumber) // Sort seats in descending order
+                      .map((seat) => (
+                        <button
+                          key={seat._id}
+                          onClick={() =>
+                            !seat.isBooked && handleSeatClick(seat._id)
+                          }
+                          className={`seat-button ${
+                            seat.isBooked
+                              ? 'unavailable'
+                              : selectedSeats.includes(seat._id)
+                              ? 'selected'
+                              : ''
+                          }`}
+                          disabled={seat.isBooked}
+                        >
+                          {seat.seat.seatNumber}
+                        </button>
+                      ))}
+                  </div>
+                )
+              )}
+            </div>
+
+            {/* Section 4: Contact Information */}
+            <div className="contact-info">
+              <h3>Biljettleverans</h3>
+              <p>För att boka biljetter, ange din e-postadress.</p>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="email-input"
+              />
+            </div>
+
+            {/* Section 5: Age Confirmation */}
+            <div className="age-confirmation">
+              <div className="age-confirmation-inner-box">
+                <label>
+                  <div className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      checked={ageConfirmation}
+                      onChange={() => setAgeConfirmation(!ageConfirmation)}
+                    />
+                  </div>
+                  <div className="checkbox-label">
+                    Jag är medveten om filmer kan ha åldersgränser. Barn som har
+                    fyllt 11 år får medfölja i vuxens sällskap. Ålder ska kunna
+                    styrkas med giltig legitimation.
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div className="book-button-container">
               <button className="book-button" onClick={handleBooking}>
                 <h1>Köp biljett!</h1>
               </button>
-          </div>
-        </div>
-      </div>
-
-      {showModal && (
-        <div className="booking-modal">
-          <div className="modal-content">
-            <h2>Bokningsbekräftelse</h2>
-            {bookingStatus?.success ? (
-              <>
-                <p>Bokningen genomfördes</p>
-                <p>Ditt bokningsnummer: {bookingStatus.bookingNumber}</p>
-                <p>Information har skickats till angiven e-postadress</p>
-                <button onClick={closeModal}>Stäng</button>
-              </>
-            ) : (
-              <>
-                <p>{bookingStatus?.message}</p>
-                <button onClick={closeModal}>Stäng</button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-      {/* Section 6: Total Amount - Aside */}
-        <div className="total-amount-aside col-12 col-lg-4 p-0">
-          {/* <Row className="w-100 g-0"> */}
-        <div className="total-amount col-12 col-lg-4">
-          {ticketTypes.map((ticketType) => (
-            <h3 key={ticketType._id}>
-              {ticketType.type}: {ticketCounts[ticketType.type] || 0} st {(ticketCounts[ticketType.type] || 0) * ticketType.price} kr
-            </h3>
-          ))}
-          {/* <h3>Ordinarie pris {ticketTypes.reduce((sum, ticketType) => sum + ((ticketCounts[ticketType.type] || 0) * ticketType.price), 0)} kr</h3> */}
-          {/* Beräkna det totala ordinarie priset baserat på antal biljetter */}
-          <h3>
-            Ordinarie pris:{" "}
-            {Object.values(ticketCounts).reduce(
-              (sum, count) => sum + (count || 0) * ORDINARY_PRICE,
-              0
-            )}{" "}
-            kr
-          </h3>
-          
-          {/* <h3>Totalt prisavdrag {ticketTypes.reduce((sum, ticketType) => sum + ((ticketCounts[ticketType.type] || 0) * ticketType.price), 0) - totalAmount} kr</h3> */}
-          {/* Beräkna prisavdraget: ordinarie pris minus det nuvarande totalbeloppet */}
-          <h3>
-            Totalt prisavdrag:{" "}
-            {Object.values(ticketCounts).reduce(
-              (sum, count) => sum + (count || 0) * ORDINARY_PRICE,
-              0
-            ) - totalAmount}{" "}
-            kr
-          </h3>
-          <h2>Att betala: {totalAmount} SEK</h2>
             </div>
-            {/* </Row> */}
           </div>
+        </div>
+
+        {showModal && (
+          <div className="booking-modal">
+            <div className="modal-content">
+              <h2>Bokningsbekräftelse</h2>
+              {bookingStatus?.success ? (
+                <>
+                  <p>Bokningen genomfördes</p>
+                  <p>Ditt bokningsnummer: {bookingStatus.bookingNumber}</p>
+                  <p>Information har skickats till angiven e-postadress</p>
+                  <button onClick={closeModal}>Stäng</button>
+                </>
+              ) : (
+                <>
+                  <p>{bookingStatus?.message}</p>
+                  <button onClick={closeModal}>Stäng</button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+        {/* Section 6: Total Amount - Aside */}
+        <div className="total-amount-aside col-12 col-lg-4 p-0">
+          <div className="total-amount col-12 col-lg-4">
+            {ticketTypes.map((ticketType) => (
+              <div key={ticketType._id} className="ticket-row">
+                <span>{ticketType.type}</span>
+                <span>{ticketCounts[ticketType.type] || 0} st</span>
+                <span>
+                  {(ticketCounts[ticketType.type] || 0) * ticketType.price} kr
+                </span>
+              </div>
+            ))}
+            <div className="ticket-row">
+              <span>Ordinarie pris</span>
+              <span>{/* Empty span for alignment */}</span>
+              <span>
+                {Object.values(ticketCounts).reduce(
+                  (sum, count) => sum + (count || 0) * ORDINARY_PRICE,
+                  0
+                )}{' '}
+                kr
+              </span>
+            </div>
+            <div className="ticket-row">
+              <span>Totalt prisavdrag</span>
+              <span>{/* Empty span for alignment */}</span>
+              <span>
+                {Object.values(ticketCounts).reduce(
+                  (sum, count) => sum + (count || 0) * ORDINARY_PRICE,
+                  0
+                ) - totalAmount}{' '}
+                kr
+              </span>
+            </div>
+            <div className="ticket-row">
+              <span>Summa:</span>
+              <span>{/* Empty span for alignment */}</span>
+              <span>{totalAmount} kr</span>
+            </div>
+          </div>
+        </div>
       </Row>
     </Container>
   );
