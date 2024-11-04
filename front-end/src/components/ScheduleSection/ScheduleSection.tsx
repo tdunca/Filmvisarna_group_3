@@ -30,7 +30,9 @@ interface ScheduleSectionProps {
 const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date, movieId }) => {
   const [showtimes, setShowtimes] = useState<{ [key: string]: Showtime[] }>({});
 
-  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0];
+  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
+    .toISOString()
+    .split('T')[0];
   const today = new Date().toISOString().split('T')[0];
   const [selectedDate, setSelectedDate] = useState<string>(today);
 
@@ -47,8 +49,12 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date, movieId }) => {
       try {
         // Kontrollera om movieId finns, och välj endpoint därefter
         const endpoint = movieId
-          ? `/api/showtime?movieId=${movieId}&startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`
-          : `/api/showtime/date-range?startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`;
+          ? `/api/showtime?movieId=${movieId}&startDate=${formatDate(
+              startDate
+            )}&endDate=${formatDate(endDate)}`
+          : `/api/showtime/date-range?startDate=${formatDate(
+              startDate
+            )}&endDate=${formatDate(endDate)}`;
 
         const response = await fetch(endpoint);
         const data = await response.json();
@@ -66,14 +72,18 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date, movieId }) => {
       setSelectedDate(date.toISOString().split('T')[0]);
     }
   }, [date]);
-  
-   // Funktion för att beräkna sluttiden baserat på starttid och längd
+
+  // Funktion för att beräkna sluttiden baserat på starttid och längd
   const calculateEndTime = (startTime: string, length: number) => {
     const [hours, minutes] = startTime.split(':').map(Number);
     const startDate = new Date();
     startDate.setHours(hours, minutes);
     const endDate = new Date(startDate.getTime() + length * 60000); // Längd i minuter till millisekunder
-    return endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    return endDate.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
   };
 
   // Funktion som genererar knappar för två veckor framåt
@@ -98,11 +108,20 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date, movieId }) => {
       buttons.push(
         <button
           key={i}
-          className={selectedDate === currentDate.toISOString().split('T')[0] ? 'selected' : ''}
+          className={
+            selectedDate === currentDate.toISOString().split('T')[0]
+              ? 'selected'
+              : ''
+          }
           onClick={() => handleDateClick(currentDate)}
         >
           <p>{getDayLabel(currentDate, i)}</p>
-          <p>{currentDate.toLocaleDateString('sv-SE', { day: 'numeric', month: 'numeric' })}</p>
+          <p>
+            {currentDate.toLocaleDateString('sv-SE', {
+              day: 'numeric',
+              month: 'numeric'
+            })}
+          </p>
         </button>
       );
     }
@@ -126,43 +145,62 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ date, movieId }) => {
     return grouped;
   };
 
-
   return (
     <section className="schedule-section col-12 p-0 g-0">
       <div className="schedule-section-buttons g-0">{dateRangeTwoWeeks()}</div>
 
       <div className="schedule-section-title col-12 g-0">
         <h2>
-          {getDayLabel(new Date(selectedDate), selectedDate === today ? 0 : selectedDate === tomorrow ? 1 : -1)}{" "}
-          {new Date(selectedDate).toLocaleDateString("sv-SE", {
-            day: "2-digit",
-            month: "2-digit",
+          {getDayLabel(
+            new Date(selectedDate),
+            selectedDate === today ? 0 : selectedDate === tomorrow ? 1 : -1
+          )}{' '}
+          {new Date(selectedDate).toLocaleDateString('sv-SE', {
+            day: '2-digit',
+            month: '2-digit'
           })}
         </h2>
       </div>
-      
+
       {selectedDate && showtimes[selectedDate] ? (
-          <div className="schedule-columns row col-12">
+        <div className="schedule-columns row col-12">
           {Object.entries(groupShowtimesByHall(showtimes[selectedDate])).map(
             ([hallName, hallShowtimes]) => (
-              <div key={hallName} className="schedule-column col-sm-12 col-md-12 col-lg-6">
+              <div
+                key={hallName}
+                className="schedule-column col-sm-12 col-md-12 col-lg-6"
+              >
                 <h3>{hallName}</h3>
                 {hallShowtimes.map((showtime) => (
                   <div key={showtime._id} className="schedule-section-showtime">
-                    <Link to={`/booking/${showtime._id}`} className="link-no-decoration">
+                    <Link
+                      to={`/booking/${showtime._id}`}
+                      className="link-no-decoration"
+                    >
                       <div className="schedule-section-showtime-info">
                         <div className="schedule-section-showtime-info__time">
-                          <p>{showtime.time} - <br/>{calculateEndTime(showtime.time, showtime.movie.length)}</p>
+                          <p>
+                            {showtime.time} - <br />
+                            {calculateEndTime(
+                              showtime.time,
+                              showtime.movie.length
+                            )}
+                          </p>
                         </div>
                         <div className="schedule-section-showtime-info__text">
-                          <h5>{showtime.movie.title} ({showtime.movie.year})</h5>
-                            <p> {showtime.movie.genre.join(', ')} </p>
+                          <h5>
+                            {showtime.movie.title} ({showtime.movie.year})
+                          </h5>
+                          <p> {showtime.movie.genre.join(', ')} </p>
                         </div>
                         <div className="schedule-section-showtime-info__text__age">
-                            <p>Åldersgräns {showtime.movie.ageRestriction} år</p>
+                          <p>Åldersgräns {showtime.movie.ageRestriction} år</p>
                         </div>
                         <div className="schedule-section-showtime-info__image">
-                            <img src={showtime.movie.poster} alt={showtime.movie.title} />
+                          <img
+                            src={showtime.movie.poster}
+                            alt={showtime.movie.title}
+                          />
                         </div>
                       </div>
                     </Link>

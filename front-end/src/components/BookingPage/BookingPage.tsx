@@ -441,7 +441,6 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
             ))}
             <div className="ticket-row">
               <span>Ordinarie pris</span>
-              <span>{/* Empty span for alignment */}</span>
               <span>
                 {Object.values(ticketCounts).reduce(
                   (sum, count) => sum + (count || 0) * ORDINARY_PRICE,
@@ -462,8 +461,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ showtimeId }) => {
               </span>
             </div>
             <div className="ticket-row">
-              <span>Summa:</span>
-              <span>{/* Empty span for alignment */}</span>
+              <h3>Summa:</h3>
               <span>{totalAmount} kr</span>
             </div>
           </div>

@@ -343,7 +343,6 @@
     background: transparent;
     .total-amount {
       position: sticky;
-      // margin-left: 12px;
     }
   }
 }
@@ -352,7 +351,7 @@
   background: $bg-gradient-total-amount;
   color: $color-primary-dark;
   border: 2px solid $color-primary-dark;
-  padding: 20px;
+  padding: 1rem;
   margin-top: 0;
   border-radius: 10px;
   position: fixed;
@@ -361,10 +360,12 @@
 
 .ticket-row {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
   margin: 10px 0;
   font-weight: bold;
+  width: 80%;
+  // font-size: 18px;
 }
 
 .ticket-row span {
