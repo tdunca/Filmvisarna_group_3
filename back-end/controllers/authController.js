@@ -34,7 +34,12 @@ export const userLogin = async (req, res) => {
     if (!token) {
       return res.status(500).json({ error: "Failed to generate token" });
     }
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, { 
+      httpOnly: true, // Prevents JavaScript access
+          secure: false, // Set to true in production (over HTTPS)
+          sameSite: 'Lax', // CSRF protection
+          maxAge: 60 * 60 * 1000 // 1 hour
+     });
     const { password: _, ...userWithoutPassword } = user.toObject();
     res.status(200).json({ message: "User logged in successfully", user: userWithoutPassword });
   } catch (error) {
