@@ -29,7 +29,7 @@ export const UserContext = createContext<UserContextType>({
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [cookies] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   useEffect(() => {
     console.log("Cookies:", cookies); // Debugging: Log cookies to check their values
@@ -50,6 +50,8 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
         .catch((error) => {
           console.error("Fetch error:", error); // Debugging: Log fetch error
         });
+    } else {
+      setUser(null); // Clear user state if token is removed
     }
   }, [cookies.token]);
 
