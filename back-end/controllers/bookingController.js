@@ -8,7 +8,7 @@ import Ticket from "../models/Ticket.js";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
-
+import jwt from "jsonwebtoken";
 // Configure nodemailer
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -76,7 +76,16 @@ export const createBooking = async (req, res) => {
         password: hashedPassword,
       });
       await user.save();
-
+      const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
+      if (!token) {
+        return res.status(500).json({ error: "Failed to create token" });
+      }
+      res.cookie("token", token, {
+        httpOnly: false, // Prevents JavaScript access
+        secure: false, // Set to true in production (over HTTPS)
+        sameSite: "Lax", // CSRF protection
+        maxAge: 3600000, // 1 hour
+      });
       // Send credentials email
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
