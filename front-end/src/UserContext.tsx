@@ -30,7 +30,7 @@ export const UserContext = createContext<UserContextType>({
 const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     console.log("Cookies:", cookies); // Debugging: Log cookies to check their values
     if (cookies.token) {
@@ -49,13 +49,20 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
         })
         .catch((error) => {
           console.error("Fetch error:", error); // Debugging: Log fetch error
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else {
       setUser(null); // Clear user state if token is removed
+      setLoading(false);
     }
   }, [cookies.token]);
 
-  const value = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const value = useMemo(
+    () => ({ user, setUser, loading }),
+    [user, setUser, loading]
+  );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

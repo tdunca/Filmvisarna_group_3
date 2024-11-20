@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../UserContext";
+import { Navigate, useParams } from "react-router-dom";
 import Accordion from "react-bootstrap/Accordion";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -31,7 +32,15 @@ interface Booking {
   totalAmount: number;
 }
 
-const Profile: React.FC = () => {
+type ProfileProps = {
+  showProfileSettings: boolean;
+  setShowProfileSettings: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Profile: React.FC<ProfileProps> = ({
+  showProfileSettings,
+  setShowProfileSettings,
+}) => {
   const { user } = useContext(UserContext);
   const [bookingHistory, setBookingHistory] = useState<Booking[]>([]);
   const [currentBookings, setCurrentBookings] = useState<Booking[]>([]);
@@ -40,14 +49,19 @@ const Profile: React.FC = () => {
   const [expandedBooking, setExpandedBooking] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showProfileSettings, setShowProfileSettings] = useState(false);
+  // if the url is /profile/update-info, show the profile settings modal
+  const { path } = useParams();
 
+  useEffect(() => {
+    if (path === "update-info") {
+      setShowProfileSettings(true);
+    }
+  }, [path]);
   useEffect(() => {
     if (user) {
       fetchBookings();
     }
   }, [user]);
-
   const fetchBookings = async () => {
     try {
       const response = await fetch("/api/user/bookings", {
@@ -394,7 +408,7 @@ const Profile: React.FC = () => {
       </Modal>
       <Modal
         show={showProfileSettings}
-        onHide={() => setShowProfileSettings(false)}
+        onHide={() => setShowProfileSettings((prev) => !prev)}
         size="lg"
         centered
       >

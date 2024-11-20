@@ -7,7 +7,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
+  console.log("User:", user); // Debugging: Log user data
+  if (loading) {
+    // Return null while user is being authenticated
+    return <div>Loading...</div>;
+  }
 
   if (!user) {
     // Redirect to login page if user is not authenticated

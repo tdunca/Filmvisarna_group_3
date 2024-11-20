@@ -80,6 +80,7 @@ export const createBooking = async (req, res) => {
       if (!token) {
         return res.status(500).json({ error: "Failed to create token" });
       }
+      const link = `http://localhost:5173/profile/update-info?t=${token}`;
       res.cookie("token", token, {
         httpOnly: false, // Prevents JavaScript access
         secure: false, // Set to true in production (over HTTPS)
@@ -96,7 +97,9 @@ export const createBooking = async (req, res) => {
         <p>Du kan logga in på MonsterBio för att hantera dina biljettbokningar.</p>
         <p>Här är dina inloggninguppgifer:</p>
         <p>E-post: ${user.email} </p>
-        <p>Lösenord: ${tempPassword}</p>`,
+        <p>Lösenord: ${tempPassword}</p>
+        <p>Click <a href="${link}">here</a> to complete your profile.</p>
+        `,
       });
     }
 

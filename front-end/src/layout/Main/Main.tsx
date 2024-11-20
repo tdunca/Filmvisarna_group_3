@@ -16,6 +16,7 @@ interface MainProps {
 }
 
 const Main: React.FC<MainProps> = ({ scheduleRef, selectedDate }) => {
+  const [showProfileSettings, setShowProfileSettings] = React.useState(false);
   return (
     <main className="container-fluid g-0">
       <Routes>
@@ -39,8 +40,31 @@ const Main: React.FC<MainProps> = ({ scheduleRef, selectedDate }) => {
         <Route path="/contact-us" element={<Contact />} />
         <Route
           path="/profile"
-          element={<ProtectedRoute element={<Profile />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <Profile
+                  showProfileSettings={showProfileSettings}
+                  setShowProfileSettings={setShowProfileSettings}
+                />
+              }
+            />
+          }
         />
+        <Route
+          path="/profile/update-info"
+          element={
+            <ProtectedRoute
+              element={
+                <Profile
+                  showProfileSettings={showProfileSettings}
+                  setShowProfileSettings={setShowProfileSettings}
+                />
+              }
+            />
+          }
+        />
+
         <Route
           path="*"
           element={
