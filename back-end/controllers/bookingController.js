@@ -80,13 +80,13 @@ export const createBooking = async (req, res) => {
       if (!token) {
         return res.status(500).json({ error: "Failed to create token" });
       }
-      const link = `http://localhost:5173/profile/update-info?t=${token}`;
-      res.cookie("token", token, {
-        httpOnly: false, // Prevents JavaScript access
-        secure: false, // Set to true in production (over HTTPS)
-        sameSite: "Lax", // CSRF protection
-        maxAge: 3600000, // 1 hour
-      });
+      const link = `http://localhost:5173/profile/update-info/${token}`;
+      // res.cookie("token", token, {
+      //   httpOnly: false, // Prevents JavaScript access
+      //   secure: false, // Set to true in production (over HTTPS)
+      //   sameSite: "Lax", // CSRF protection
+      //   maxAge: 3600000, // 1 hour
+      // });
       // Send credentials email
       await transporter.sendMail({
         from: process.env.EMAIL_USER,

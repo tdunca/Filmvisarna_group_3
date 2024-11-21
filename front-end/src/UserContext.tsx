@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
 } from "react";
+import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 interface User {
@@ -31,6 +32,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     console.log("Cookies:", cookies); // Debugging: Log cookies to check their values
     if (cookies.token) {

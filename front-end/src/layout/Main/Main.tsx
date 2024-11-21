@@ -52,7 +52,7 @@ const Main: React.FC<MainProps> = ({ scheduleRef, selectedDate }) => {
           }
         />
         <Route
-          path="/profile/update-info"
+          path="/profile/update-info/:token"
           element={
             <ProtectedRoute
               element={

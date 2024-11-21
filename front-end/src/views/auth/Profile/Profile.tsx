@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../UserContext";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import Accordion from "react-bootstrap/Accordion";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -41,7 +41,9 @@ const Profile: React.FC<ProfileProps> = ({
   showProfileSettings,
   setShowProfileSettings,
 }) => {
-  const { user } = useContext(UserContext);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+  const { user, setUser } = useContext(UserContext);
   const [bookingHistory, setBookingHistory] = useState<Booking[]>([]);
   const [currentBookings, setCurrentBookings] = useState<Booking[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -53,15 +55,33 @@ const Profile: React.FC<ProfileProps> = ({
   const { path } = useParams();
 
   useEffect(() => {
-    if (path === "update-info") {
-      setShowProfileSettings(true);
+    if (token) {
+      validateToken(token);
     }
-  }, [path]);
+  }, [token]);
   useEffect(() => {
     if (user) {
       fetchBookings();
     }
   }, [user]);
+  const validateToken = async (token: string) => {
+    try {
+      const response = await fetch(`/api/auth/verify-token?token=${token}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        throw new Error("Invalid token");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const fetchBookings = async () => {
     try {
       const response = await fetch("/api/user/bookings", {
